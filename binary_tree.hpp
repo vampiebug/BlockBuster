@@ -19,17 +19,13 @@ private:
 
     TreeNode* root;
 public:
-    bool isTreeEmpty();
-    void insertNode(TreeNode *new_node);
-    void printPreorder(TreeNode* r);
-    void printInorder(TreeNode* r);
-    void printPostorder(TreeNode* r);
-    void print2D(TreeNode *r, int space);
-    void printLevelOrder(TreeNode *r);
-
-    TreeNode* search(TreeNode*r, int v);
+    bool isEmpty();
+    void insertNode(TreeNode *new_node); 
+    void print2D(TreeNode *r, int space); 
+    //void swap(TreeNode *node1, TreeNode *node2); // swap (do this with the list hpps???)
     TreeNode* minValueNode(TreeNode* node);
-    TreeNode* deleteNode(TreeNode* r, int v);
+    TreeNode* search( int v); //check if a query is in the inventory
+    TreeNode* deleteNode(TreeNode* r, int v); // remove a movie from inventory
 
 };
 

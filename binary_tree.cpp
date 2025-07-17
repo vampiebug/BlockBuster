@@ -1,5 +1,6 @@
 #include <iostream>
 #include "binary_tree.hpp"
+#include "inventory.hpp"
 
 using namespace std;
 
@@ -76,5 +77,65 @@ class BST{
             }
             cout << r->value << "\n";
             print2D(r->left, space);
+        }
+
+        TreeNode* search( int v){
+            if( root == NULL ){
+                return root;
+            }
+            else{
+                TreeNode *temp=root;
+                while( temp != NULL){
+                    if( v == temp->value){
+                        return temp;
+                    }
+                    else if(v < temp->value){
+                        temp = temp->left;
+                    }
+                    else{
+                        temp = temp->right;
+                    }
+                }
+            }
+        }
+
+        TreeNode* minValueNode(TreeNode* node){
+            TreeNode* current = node;
+            while( current->left != NULL ){
+                current = current->left;
+            }
+            return current;
+        }
+
+        TreeNode* deleteNode(TreeNode* r, int v){
+            if( r== NULL ){
+                return NULL;
+            }
+            else if(v < r->value){
+                r->left = deleteNode(r->left, v);
+            }
+            else if(v > r->value){
+                r->right = deleteNode(r->right, v);
+            }
+            else{
+                if(r->left == NULL){
+                    TreeNode* temp = r->right;
+                    delete r;
+                    r = NULL;
+                    return temp;
+                }
+                else if(r->right == NULL){
+                    TreeNode* temp = r->left;
+                    delete r;
+                    r = NULL;
+                    return temp;
+                }
+                else{
+                    TreeNode* temp = minValueNode(r->right);
+                    r->value = temp->value;
+                    r->right = deleteNode(r->right, temp->value);
+                }
+            }
+            return r;
         }
 };

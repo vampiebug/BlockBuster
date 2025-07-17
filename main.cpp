@@ -44,22 +44,22 @@ int main(int argc, char** argv)
 // *****************************************************************************************************
 	// step 1: get the following code to work to work.
 	// this requires implementing a copy constructor and the operator= function for the Movie class.
-//	while( finicky_database.readFirst(movie) )
-//	{
-//		cout << movie << endl;
-//	}
-//	cout << "Finicky database contained " << finicky_database.size() << " movies." << endl;
-//
-//	// try 10 times to output the data a second time
-//	for(int i = 0; i < 10; i ++ )
-//	{
-//		cout << "Trying to output the movies again..." << endl;
-//		while( finicky_database.readFirst(movie) )
-//		{
-//			cout << movie << endl;
-//		}
-//		cout << "Done trying to output the movies again." << endl;
-//	}
+	while( finicky_database.readFirst(movie) )
+	{
+		cout << movie << endl;
+	}
+	cout << "Finicky database contained " << finicky_database.size() << " movies." << endl;
+
+	// try 10 times to output the data a second time
+	for(int i = 0; i < 10; i ++ )
+	{
+		cout << "Trying to output the movies again..." << endl;
+		while( finicky_database.readFirst(movie) )
+		{
+			cout << movie << endl;
+		}
+		cout << "Done trying to output the movies again." << endl;
+	}
 	// you can comment the code for step 1 above once you're done.
 	// you will use similar functionality below
 	// (leave the copy constructor and operator= for the Movie class)
