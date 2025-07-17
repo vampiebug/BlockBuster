@@ -14,7 +14,9 @@
 // constructor
 Movie::Movie()
 	: year(0),
-	  date_published{},
+    //ask about this line: commented out the version with error, replaced it with fixed one
+	  //date_published{},
+      date_published(),
 	  num_genres(0),
 	  genre(nullptr),
 	  duration_min(0),
@@ -30,6 +32,98 @@ Movie::Movie()
 {
 	// nothing to do here
 }
+
+//BIG 3:
+//copy ctor --check if these should be shallow or deep references. Shallow might work because movies are big objects, but check for best practice. copy operator at least needs to be deep because things will be deleted.
+//need to be deep copies for dynamic objects 
+Movie::Movie(const Movie& movie) : 
+//everything that isn't dynamic is just declared normally
+    title(movie.title),
+    year(movie.year),
+	date_published(movie.date_published),
+	//std::string genre;
+	num_genres(movie.num_genres),
+    //everything that is dynamic needs a new object. Need to actually fill that in in the brackets, but initialize here.
+    genre(new std::string[this->num_genres]),
+	duration_min(movie.duration_min),
+	country(movie.country),
+	language(movie.language),
+	num_directors(movie.num_directors),
+	directors(new std::string[this->num_directors]),
+	writer(movie.writer),
+	production_company(movie.production_company),
+	num_actors(movie.num_actors),
+	actors(new std::string[this->num_actors]),
+	usa_gross_income(movie.usa_gross_income),
+	worldwide_gross_income(movie.worldwide_gross_income)
+
+{
+    //fill in the genres
+    for (int i = 0; i < this->num_genres; i++){
+        //should work bc accessing element is dereferencing
+        this->genre[i] = movie.genre[i];
+    }
+    //fill in the directors
+    for (int i = 0; i < this->num_directors; i++){
+        this->directors[i] = movie.directors[i];
+    }
+    //fill in the genres
+    for (int i = 0; i < this->num_actors; i++){
+        this->actors[i] = movie.actors[i];
+    }
+}
+//assignment op--also check if this should be done by pointer or copy.
+Movie& Movie::operator=(const Movie& movie){
+    //check this isn't self-assign by comparing addresses
+    if (this != &movie){
+        //delete the heap objects.
+        delete[] this->actors;
+        delete[] this->genre;
+        delete[] this->directors;
+        //reassign everything
+        this->title = movie.title;
+        this->year = movie.year;
+        this->date_published = movie.date_published;
+        //std::string genre;
+        this->num_genres = movie.num_genres;
+        this->genre = new std::string[this->num_genres];
+        for (int i = 0; i < this->num_genres; i++){
+            //should work bc accessing element is dereferencing
+            this->genre[i] = movie.genre[i];
+        }
+        this->duration_min = movie.duration_min;
+        this->country = movie.country;
+        this->language = movie.language;
+        this->num_directors = movie.num_directors;
+        this->directors = new std::string[this->num_directors];
+        for (int i = 0; i < this->num_directors; i++){
+            //should work bc accessing element is dereferencing
+            this->directors[i] = movie.directors[i];
+        }
+        this->writer = movie.writer;
+        this->production_company = movie.production_company;
+        this->num_actors = movie.num_actors;
+        this->actors = new std::string[this->num_actors];
+        for (int i = 0; i < this->num_actors; i++){
+            //should work bc accessing element is dereferencing
+            this->actors[i] = movie.actors[i];
+        }
+        this->usa_gross_income = movie.usa_gross_income;
+        this->worldwide_gross_income = movie.worldwide_gross_income;
+    }
+    //return *this (pointer to current object)
+    return *this;
+
+}
+//dtor--delete all dynamic members. Again, check requirements. Should just be genres, actors, and directors
+Movie::~Movie(){
+    delete[] this->actors;
+    delete[] this->genre;
+    delete[] this->directors;
+}
+
+
+
 
 bool operator==(const Movie& movie, const std::string& title)
 {
@@ -247,18 +341,3 @@ std::ostream& operator<<(std::ostream& os, const Movie& m)
 	return os << m.one_liner();
 }
 
-// Deep copy operator~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Movie& Movie::operator=(const Movie& other) {
-    //this->pop_all();
-    //this->push_all(other);
-}
-
-// deconstructor~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Movie::~Movie(){
-    delete genre;
-    delete directors;
-    delete actors;
-    genre = NULL;
-    directors = NULL;
-    actors = NULL;
-}

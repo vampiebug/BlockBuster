@@ -1,0 +1,21 @@
+type	linked_list
+insert	Bullseye!
+insert	La nonna Sabella
+insert	The Ides of March
+insert	Hell of a Night
+remove	La nonna Sabella
+remove	Bullseye!
+remove	Downhill
+remove	The McConnell Story
+insert	Downhill
+swap	Tallinn pimeduses|Hell of a Night
+swap	Hell of a Night|Tallinn pimeduses
+insert	The McConnell Story
+insert	Huang Fei Hong: Nan bei ying xiong
+insert	Santa & Andrés
+swap	Hell of a Night|Tallinn pimeduses
+remove	Hell of a Night
+remove	Niki Ardelean, colonel în rezerva
+insert	Tallinn pimeduses
+insert	Niki Ardelean, colonel în rezerva
+insert	The Hillside Strangler

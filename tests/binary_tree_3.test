@@ -1,0 +1,11 @@
+type	binary_tree
+insert	Hua pi
+insert	Girls Town
+insert	Utrpení mladého Bohácka
+remove	They Came Together
+remove	Girls Town
+swap	They Came Together|Girls Town
+insert	Girls Town
+remove	Utrpení mladého Bohácka
+swap	Utrpení mladého Bohácka|Hua pi
+insert	They Came Together

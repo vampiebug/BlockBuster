@@ -1,0 +1,11 @@
+type	linked_list
+insert	Hanagatami
+remove	Hallåhallå
+remove	Impiegati
+remove	Hanagatami
+insert	Hallåhallå
+remove	Ye Mantram Vesave
+insert	Impiegati
+insert	Man of Violence
+insert	Ye Mantram Vesave
+swap	Impiegati|Ye Mantram Vesave

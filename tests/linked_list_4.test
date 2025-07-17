@@ -1,0 +1,21 @@
+type	linked_list
+remove	Parker's Anchor
+insert	Hridoyer Kotha
+remove	Room to Rent
+remove	Matka Teresa od kotów
+remove	La cara oculta
+insert	La cara oculta
+remove	Unexpected Guest
+insert	Once More
+insert	Room to Rent
+insert	Parker's Anchor
+insert	Matka Teresa od kotów
+remove	Hridoyer Kotha
+swap	La cara oculta|Matka Teresa od kotów
+remove	Once More
+insert	The Millionaire
+insert	Wild Harvest
+swap	Parker's Anchor|Wild Harvest
+remove	Wild Harvest
+insert	Unexpected Guest
+remove	The Millionaire

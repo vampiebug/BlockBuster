@@ -10,13 +10,13 @@
 class Movie
 {
 public:
-	// ctor / dtor
+	// default ctor--creates empty movie
 	Movie();
 
 	// the big 3: copy constructor, operator= and destructor
-	Movie(const Movie&);			// for step 1
-	Movie& operator=(const Movie& other);		// for step 1
-	~Movie();				// for step 1
+	Movie(const Movie&);			// for step 1: copy
+	Movie& operator=(const Movie&);		// for step 1: assignment
+	~Movie();				// for step 1: dtor
 
 	// for easy .csv input
 	friend std::istream& operator>>(std::istream&, Movie&);
