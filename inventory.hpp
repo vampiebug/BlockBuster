@@ -69,6 +69,6 @@ public:
 		return os;
 	}
 };
-#endif // TEMPLATE
+#endif //TEMPLATE
 
-#endif // INVENTORY_H
+#endif //INVENTORY_H

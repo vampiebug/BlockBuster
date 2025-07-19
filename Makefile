@@ -1,2 +1,2 @@
 all:
-	g++ main.cpp movie.cpp -o blockbuster
+	g++ -std=c++17 main.cpp movie.cpp -o blockbuster

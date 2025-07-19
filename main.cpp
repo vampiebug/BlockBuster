@@ -1,6 +1,7 @@
 #include "movie.hpp"
 #include "inventory.hpp"
 #include "finicky_database.hpp"
+#include "singly_linked_list.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -44,22 +45,39 @@ int main(int argc, char** argv)
 // *****************************************************************************************************
 	// step 1: get the following code to work to work.
 	// this requires implementing a copy constructor and the operator= function for the Movie class.
-	while( finicky_database.readFirst(movie) )
-	{
-		cout << movie << endl;
-	}
-	cout << "Finicky database contained " << finicky_database.size() << " movies." << endl;
+	// while( finicky_database.readFirst(movie) )
+	// {
+	// 	cout << movie << endl;
+	// }
+	// cout << "Finicky database contained " << finicky_database.size() << " movies." << endl;
 
-	// try 10 times to output the data a second time
-	for(int i = 0; i < 10; i ++ )
-	{
-		cout << "Trying to output the movies again..." << endl;
-		while( finicky_database.readFirst(movie) )
-		{
-			cout << movie << endl;
-		}
-		cout << "Done trying to output the movies again." << endl;
-	}
+	// // try 10 times to output the data a second time
+	// for(int i = 0; i < 10; i ++ )
+	// {
+	// 	cout << "Trying to output the movies again..." << endl;
+	// 	while( finicky_database.readFirst(movie) )
+	// 	{
+	// 		cout << movie << endl;
+	// 	}
+	// 	cout << "Done trying to output the movies again." << endl;
+	// }
+
+	// //Caitlyn testing--able to build a singly list inverntory and find individual items.
+	// Inventory<Movie>* test;
+	// test = new SinglyLinkedList<Movie>;
+	// //Movie movie;
+	// while (finicky_database.readFirst(movie)){
+	// 	test->insert(movie);
+	// 	cout<<movie<<endl;
+	// }
+	// cout<<"read from finicky\n";
+	// cout<<test->size()<<endl;
+	// cout<<*(test->contains("Madame DuBarry"))<<endl;
+	// //finds the movie and prints its line
+
+
+
+
 	// you can comment the code for step 1 above once you're done.
 	// you will use similar functionality below
 	// (leave the copy constructor and operator= for the Movie class)
@@ -81,7 +99,8 @@ int main(int argc, char** argv)
 	
 	// instantiate your inventory 
 	//Inventory* inventory;		// if not using templates
-	//Inventory<Movie>* inventory;	// if using templates
+	Inventory<Movie>* inventory = nullptr;	// if using templates
+	inventory = new SinglyLinkedList<Movie>();
 
 // *****************************************************************************************************
 	// step 2: instantiate an inventory as a linked list
@@ -109,10 +128,16 @@ int main(int argc, char** argv)
 	// step 3.5: populate your inventory from the finicky database
 
 	// show the current state of the inventory
+	//tested this above--works
+	while (finicky_database.readFirst(movie)){
+		inventory->insert(movie);
+		//cout<<movie<<endl;
+	}
 	//cerr << *inventory << endl;
 // *****************************************************************************************************
 	// step 4: implement a user list as a doubly linked list
 	// process each command in the test case according to the inventory interface
+
 
 	// step 4.5: output the user list to stdout
 	//cerr << "Outputting user list." << endl;
