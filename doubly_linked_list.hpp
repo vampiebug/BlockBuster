@@ -9,10 +9,9 @@ using namespace std;
 template <typename T>
 class DoubleList {
 private:
-    // recursive data structure to hold each chunk of the list
 	struct DoubleNode { //initialize the head pointers and null
 		T data;	// holds a piece of data
-		DoubleNode* next;	// holds a pointer to the next chunk
+		DoubleNode* next;	// holds a pointer to the next node
         DoubleNode* prev;
 
 		DoubleNode(T Data){
@@ -159,6 +158,44 @@ public:
         this->pop_all();
         this->push_all(other);
     }
+
+    Iterator begin() {
+        return Iterator(head);
+    }
+
+  // EFFECTS: Returns a past-the-end iterator.
+    Iterator end() {
+        return Iterator();
+    }
+
+    class Iterator {
+        friend class DoubleList;
+        public:
+            T & operator*() const{
+                assert(node_ptr);  // check whether this is a past-the-end iterator
+                return node_ptr->data;
+            }
+
+            Iterator &operator++(){
+                assert(node_ptr);  // check whether this is a past-the-end iterator
+                Iterator tmp = *this;               // make a copy of this iterator
+                node_ptr = node_ptr->next;
+                return tmp;
+            }
+
+            bool operator==(Iterator rhs) const{
+                return node_ptr == rhs.node_ptr;
+            }
+
+            bool operator!=(Iterator rhs) const{
+                return node_ptr != rhs.node_ptr;
+            }
+        private:
+            DoubleNode *node_ptr;
+    };
+
 };
+
+
 
 #endif
