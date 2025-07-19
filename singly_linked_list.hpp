@@ -53,6 +53,8 @@ class SinglyLinkedList : public Inventory<T> {
 				return head->datum;
 			}
 			//um help what do we return otherwise
+
+			//maybe a throw?
 		}
 
 		virtual size_t size() const override{
