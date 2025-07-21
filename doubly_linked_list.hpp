@@ -3,11 +3,12 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <sstream>
 using namespace std;
 
 // https://stackoverflow.com/questions/67788059/c-doubly-linkedlist-in-template 
 template <typename T>
-class DoubleList {
+class DoubleList : public Inventory<T>{
 private:
 	struct DoubleNode { //initialize the head pointers and null
 		T data;	// holds a piece of data
@@ -32,7 +33,9 @@ public:
         tail = nullptr;
     }
     ~DoubleList<T>() { //Deconstructor
-        pop_all();
+        this->pop_all();
+        delete this->head;
+        delete this->tail;
     }
     bool empty() const {
         if (head == nullptr)
@@ -99,14 +102,25 @@ public:
         }
     }
     // gets a reference to the *data* value of the front node
-	int& front(){
+	T& front(){
         return this->head->data;
 
     }
     // gets a reference to the data value of the back node
-    int& back(){
+    T& back(){
         return this->tail->data;
     }
+    // Add new data to the front of the list
+	virtual void insert(const T& data) override{
+		//create a new node
+		DoubleNode* new_node = new DoubleNode();
+		//set its datum
+		new_node->data = data;
+		//set its next to the head
+		new_node->next = this->head;
+		//set the head to the new node.
+		this->head = new_node;	
+	}
     // check if the list contains a particular item
 	bool contains(const T DoubleList<T>& list) const{
         // Initialize a pointer with the head of linked list
@@ -125,49 +139,72 @@ public:
         // If there is no node with the same value, will return false
         return false;
     }
+    virtual size_t size() const override{
+		DoubleNode* curr = this->head;
+		size_t size = 0;
+		while (nullptr!= curr){
+			size++;
+			curr = curr->next;
+		}
+		return size;
+	}
     // prints the list to a stream (basically the same as single)
     void print(std::ostream& output_stream) const{
         output_stream << "[";
         for(DoubleNode* temp = head; head != nullptr; temp=temp->next){
             output_stream << temp->data;
+            output_stream<<", ";
         }
         output_stream << "]";
     }
     // prints the list to a stream in a convenient way (non-member)
     friend std::ostream& operator<< (std::ostream& output_stream, const DoubleList<T>& list) {
+        output_stream << "[";
         output_stream << list.head->data;
         DoubleNode* temp = list.head->next;
         while (temp != nullptr) {
-            output_stream <<  "   " << temp->data;
-            temp = temp -> next;
+            output_stream <<  ", " << temp->data;
+            temp = temp->next;
         }
+        output_stream << "]";
         return output_stream; 
     }
     // determines if the data contained by one list is the same as in the other
 	bool operator== (const DoubleList& other) const{
-        	//loop through the list. both will need to increment, terminates when either is nullptr.
-			DoubleNode* my_temp = this->head;
-			DoubleNode* other_temp = other.head;
-			while (my_temp!=nullptr && other_temp != nullptr){
-				//if they are ever not equal, return false.
-				if (my_temp->datum != other_temp->datum){
-					return false;
-				}
-				my_temp = my_temp->next;
-				other_temp = other_temp->next;
+        //loop through the list. both will need to increment, terminates when either is nullptr.
+		DoubleNode* my_temp = this->head;
+		DoubleNode* other_temp = other.head;
+		while (my_temp!=nullptr && other_temp != nullptr){
+			//if they are ever not equal, return false.
+			if (my_temp->data != other_temp->data){
+				return false;
 			}
-			//at the end of the list, if both temps are nullptr, then the lists are the same length. We can return true if that is true, otherwise it is false.
-			if (my_temp == nullptr && other_temp == nullptr){
-				return true;
-			}
-			return false;
+			my_temp = my_temp->next;
+			other_temp = other_temp->next;
+		}
+		//at the end of the list, if both temps are nullptr, then the lists are the same length. We can return true if that is true, otherwise it is false.
+		if (my_temp == nullptr && other_temp == nullptr){
+			return true;
+		}
+		return false;
     }
 	
-	// calls operator== and negates it (did I interpret this right?)~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// calls operator== and negates it
 	bool operator!= (const DoubleList& other) const{
-        return !(*this==other)
+        return !(*this==other);
     }
     
+    //copy constructor
+    DoubleList(const SinglyLinkedList& other){
+		// will need two directions of push_all
+
+		DoubleList<T> temp_1 = DoubleList<T>();
+		temp_1.push_all(other);
+		//temp 1 has all the values, but in reverse. Can now push_all from it to the SinglyLinkedList being created.
+		this->push_all(temp_1);
+			
+		}
+
     // sets this list equal to another one (in a sane way)
 	DoubleList& operator= (const DoubleList& other){
         if (*this != other){
@@ -177,8 +214,51 @@ public:
         return *this;
     }
 
+    //swap two movies contained in the double linked list
+    void swap(Node* node1, Node* node2){
+        //create temp holders for the nodes to swap with
+        DoubleNode* curr1 = head;
+        DoubleNode* curr2 = head;
+        
+        //find the correct node they should point to
+        for(int i = 1; i < node1; i++) {
+            curr1 = curr1->next;
+        }
+        for(int i = 1; i < node2; i++) {
+            curr2 = curr2->next;
+        }
+
+        //swap the values of two nodes
+        int value = curr1->data;
+        curr1->data = curr2->data;
+        curr2->data = value;
+    }
+
+    //remove a specific movie from the double linked list using pop function
+    void remove(T data){
+        DoubleNode* current = head; //tracker starting at the front of the list
+
+        while( current != nullptr && current->data != data){
+            current = current->next; //traverse the double linked list until the data equals
+        }
+        
+        if (current != nullptr){
+            if (current->next != nullptr){
+                current = current->next;
+            }
+            else if (current->prev != nullptr){
+                current->prev->next = current->next; //the previous node will be next
+            }
+            else{
+                head = current->next;
+            }
+            delete current;
+            current = NULL;
+        }
+    }
+
     Iterator begin() {
-        return Iterator(head);
+        return Iterator(this->head);
     }
 
   // EFFECTS: Returns a past-the-end iterator.
@@ -189,7 +269,7 @@ public:
     class Iterator {
         friend class DoubleList;
         public:
-            T & operator*() const{
+            T& operator*() const{
                 assert(node_ptr);  // check whether this is a past-the-end iterator
                 return node_ptr->data;
             }
