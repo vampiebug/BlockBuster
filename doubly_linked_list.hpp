@@ -145,18 +145,36 @@ public:
     }
     // determines if the data contained by one list is the same as in the other
 	bool operator== (const DoubleList& other) const{
-        
+        	//loop through the list. both will need to increment, terminates when either is nullptr.
+			DoubleNode* my_temp = this->head;
+			DoubleNode* other_temp = other.head;
+			while (my_temp!=nullptr && other_temp != nullptr){
+				//if they are ever not equal, return false.
+				if (my_temp->datum != other_temp->datum){
+					return false;
+				}
+				my_temp = my_temp->next;
+				other_temp = other_temp->next;
+			}
+			//at the end of the list, if both temps are nullptr, then the lists are the same length. We can return true if that is true, otherwise it is false.
+			if (my_temp == nullptr && other_temp == nullptr){
+				return true;
+			}
+			return false;
     }
 	
 	// calls operator== and negates it (did I interpret this right?)~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	bool operator!= (const DoubleList& other) const{
-        
+        return !(*this==other)
     }
     
     // sets this list equal to another one (in a sane way)
 	DoubleList& operator= (const DoubleList& other){
-        this->pop_all();
-        this->push_all(other);
+        if (*this != other){
+            this->pop_all();
+            this->push_all(other);
+        }
+        return *this;
     }
 
     Iterator begin() {

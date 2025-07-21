@@ -2,6 +2,7 @@
 #include "inventory.hpp"
 #include "finicky_database.hpp"
 #include "singly_linked_list.hpp"
+#include "binary_tree.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -31,6 +32,7 @@ int main(int argc, char** argv)
 	FinickyDatabase<Movie> finicky_database;
 	finicky_database.populate( argv[1] );
 	end = std::chrono::high_resolution_clock::now();
+	
 	diff  = std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
 	cerr
 		<< "Populated the finicky database with "
@@ -73,6 +75,26 @@ int main(int argc, char** argv)
 	// cout<<"read from finicky\n";
 	// cout<<test->size()<<endl;
 	// cout<<*(test->contains("Madame DuBarry"))<<endl;
+	//finds the movie and prints its line
+	Binary_Tree<Movie>* test = new Binary_Tree<Movie>();
+	
+	//cout<<*(test->contains("Madame DuBarry"))<<endl;
+
+	// finicky_database.readFirst(movie);
+	// test->insert(movie);
+	int tracker = 0;
+	cout<<finicky_database.size()<<endl;
+	while (finicky_database.readFirst(movie)){
+		test->insert(movie);
+		//cout<<movie<<endl;
+		tracker++;
+	}
+
+	// //cout<<test->getRoot()<<endl;
+	// cout<<"read from finicky\n";
+	test->print(cout);
+	cout<<test->size()<<" "<<tracker<<endl;
+	cout<<(test->contains("Cleopatra"))<<endl;
 	// //finds the movie and prints its line
 
 
@@ -100,7 +122,7 @@ int main(int argc, char** argv)
 	// instantiate your inventory 
 	//Inventory* inventory;		// if not using templates
 	Inventory<Movie>* inventory = nullptr;	// if using templates
-	inventory = new SinglyLinkedList<Movie>();
+	//inventory = new SinglyLinkedList<Movie>();
 
 // *****************************************************************************************************
 	// step 2: instantiate an inventory as a linked list
@@ -109,12 +131,16 @@ int main(int argc, char** argv)
 		cerr << "Instantiating the inventory as a linked list!" << endl;
 
 		linked_list = true;
+		inventory = new SinglyLinkedList<Movie>();
 	}
 // *****************************************************************************************************
 	// step 3: instantiate an inventory as a binary tree
 	else if( operations[0] == "type" && operations[1] == "binary_tree" )
 	{
 		cerr << "Instantiating the inventory as a binary tree!" << endl;
+		//here's what's weird: when I run with the smaller count_test tsv, it finds the correct number of lines. When I run it with the full database, it finds one fewer. I want to assume this is not my error, based on the fact that starting from the beginning is fine but something towards the end seems not to be duplicating.
+		inventory = new Binary_Tree<Movie>();
+	
 	}
 // *****************************************************************************************************
 	// something is wrong here so we end
@@ -133,10 +159,23 @@ int main(int argc, char** argv)
 		inventory->insert(movie);
 		//cout<<movie<<endl;
 	}
-	//cerr << *inventory << endl;
+	cerr << *inventory << endl;
 // *****************************************************************************************************
 	// step 4: implement a user list as a doubly linked list
 	// process each command in the test case according to the inventory interface
+
+	//adding the loop for operations
+	for (int i = 2; i < operations.size() / 2; i+=2){
+		if (operations[i] == "insert"){
+			
+		}
+		if (operations[i] == "remove"){
+
+		}
+		if (operations[i] == "swap"){
+
+		}
+	}
 
 
 	// step 4.5: output the user list to stdout

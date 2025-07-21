@@ -131,7 +131,7 @@ class SinglyLinkedList : public Inventory<T> {
 		}
 
 		// prints the list to a stream
-		void print(std::ostream& output_stream) const{
+		void print(std::ostream& output_stream) const override{
 			output_stream<<"[";//this is just format stuff
 			//for each node, print its datum and some formatting.
 			Node* temp = this->head;
