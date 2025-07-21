@@ -2,6 +2,7 @@
 #include "inventory.hpp"
 #include "finicky_database.hpp"
 #include "singly_linked_list.hpp"
+#include "doubly_linked_list.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -131,11 +132,11 @@ int main(int argc, char** argv)
 	//tested this above--works
 	while (finicky_database.readFirst(movie)){
 		inventory->insert(movie);
-		//cout<<movie<<endl;
+		cout<<movie<<endl;
 	}
-	//cerr << *inventory << endl;
+	cerr << *inventory << endl;
 // *****************************************************************************************************
-	// step 4: implement a user list as a doubly linked list
+	// step 4: implement a user list as a doubly linked list (TODO)
 	// process each command in the test case according to the inventory interface
 
 

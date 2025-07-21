@@ -194,6 +194,7 @@ public:
         return !(*this==other);
     }
     
+    //copy constructor
     DoubleList(const SinglyLinkedList& other){
 		// will need two directions of push_all
 
@@ -208,6 +209,49 @@ public:
 	DoubleList& operator= (const DoubleList& other){
         this->pop_all();
         this->push_all(other);
+    }
+
+    //swap two movies contained in the double linked list
+    void swap(Node* node1, Node* node2){
+        //create temp holders for the nodes to swap with
+        DoubleNode* curr1 = head;
+        DoubleNode* curr2 = head;
+        
+        //find the correct node they should point to
+        for(int i = 1; i < node1; i++) {
+            curr1 = curr1->next;
+        }
+        for(int i = 1; i < node2; i++) {
+            curr2 = curr2->next;
+        }
+
+        //swap the values of two nodes
+        int value = curr1->data;
+        curr1->data = curr2->data;
+        curr2->data = value;
+    }
+
+    //remove a specific movie from the double linked list using pop function
+    void remove(T data){
+        DoubleNode* current = head; //tracker starting at the front of the list
+
+        while( current != nullptr && current->data != data){
+            current = current->next; //traverse the double linked list until the data equals
+        }
+        
+        if (current != nullptr){
+            if (current->next != nullptr){
+                current = current->next;
+            }
+            else if (current->prev != nullptr){
+                current->prev->next = current->next; //the previous node will be next
+            }
+            else{
+                head = current->next;
+            }
+            delete current;
+            current = NULL;
+        }
     }
 
     Iterator begin() {
