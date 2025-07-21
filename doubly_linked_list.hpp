@@ -28,11 +28,11 @@ private:
     DoubleNode* tail;     // last node of list (set null)
 
 public:
-    DoubleList<T>() { //Constructor
+    DoubleList() { //Constructor
         head = nullptr;
         tail = nullptr;
     }
-    ~DoubleList<T>() { //Deconstructor
+    ~DoubleList() { //Deconstructor
         this->pop_all();
         delete this->head;
         delete this->tail;
@@ -46,21 +46,21 @@ public:
     }
     void push_front(T data) {
         if (head != nullptr) { // push to the front of the list
-            head = new DoubleNode<T>(data, nullptr, head); //prev pointer is null
+            head = new DoubleNode(data, nullptr, head); //prev pointer is null
             head ->next->prev = head;
         }
         else { // else we need to create a new node that the head points to, and make the tail point to the head (since there is only one node)
-            head = new DoubleNode<T>(data,nullptr,nullptr); //prev and head pointer is null
+            head = new DoubleNode(data,nullptr,nullptr); //prev and head pointer is null
             tail = head; 
         }       
     }
     void push_back(T data) {
         if (tail != nullptr) { // push to the back of the list
-            tail = new DoubleNode<T>(data, tail,nullptr); // head is null
+            tail = new DoubleNode(data, tail,nullptr); // head is null
             tail->prev->next = tail;
         }
         else { // else we need to create a new node that the head points to, and make the tail point to the head (since there is only one node)
-            tail = new DoubleNode<T>(data,nullptr,nullptr); //prev and head pointer is null
+            tail = new DoubleNode(data,nullptr,nullptr); //prev and head pointer is null
             head = tail;
         }  
     }
@@ -87,9 +87,11 @@ public:
         
     }
     // pushes all elements from another list onto this one
-	void push_all(const T DoubleList<T>& list){
-        while(head != nullptr){
-            push_front(list.data);
+	void push_all(const DoubleList& list){
+        Iterator it = Iterator(list.head);
+        while(it != nullptr){
+            this->push_front(*it);
+            ++it;
         }
     }
 
@@ -122,7 +124,7 @@ public:
 		this->head = new_node;	
 	}
     // check if the list contains a particular item
-	bool contains(const T DoubleList<T>& list) const{
+	bool contains(const DoubleList& list) const{
         // Initialize a pointer with the head of linked list
         DoubleNode* current = head;
 
@@ -158,7 +160,7 @@ public:
         output_stream << "]";
     }
     // prints the list to a stream in a convenient way (non-member)
-    friend std::ostream& operator<< (std::ostream& output_stream, const DoubleList<T>& list) {
+    friend std::ostream& operator<< (std::ostream& output_stream, const DoubleList& list) {
         output_stream << "[";
         output_stream << list.head->data;
         DoubleNode* temp = list.head->next;
@@ -195,10 +197,10 @@ public:
     }
     
     //copy constructor
-    DoubleList(const SinglyLinkedList& other){
+    DoubleList(const DoubleList& other){
 		// will need two directions of push_all
 
-		DoubleList<T> temp_1 = DoubleList<T>();
+		DoubleList temp_1 = DoubleList();
 		temp_1.push_all(other);
 		//temp 1 has all the values, but in reverse. Can now push_all from it to the SinglyLinkedList being created.
 		this->push_all(temp_1);
@@ -215,7 +217,7 @@ public:
     }
 
     //swap two movies contained in the double linked list
-    void swap(Node* node1, Node* node2){
+    void swap(DoubleNode* node1, DoubleNode* node2){
         //create temp holders for the nodes to swap with
         DoubleNode* curr1 = head;
         DoubleNode* curr2 = head;
@@ -256,15 +258,7 @@ public:
             current = NULL;
         }
     }
-
-    Iterator begin() {
-        return Iterator(this->head);
-    }
-
-  // EFFECTS: Returns a past-the-end iterator.
-    Iterator end() {
-        return Iterator();
-    }
+\
 
     class Iterator {
         friend class DoubleList;
@@ -287,6 +281,15 @@ public:
 
             bool operator!=(Iterator rhs) const{
                 return node_ptr != rhs.node_ptr;
+            }
+
+            Iterator begin() {
+                return Iterator(this->head);
+            }
+
+            // EFFECTS: Returns a past-the-end iterator.
+            Iterator end() {
+                return Iterator();
             }
         private:
             DoubleNode *node_ptr;
