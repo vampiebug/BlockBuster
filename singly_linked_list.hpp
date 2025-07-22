@@ -22,8 +22,7 @@ class SinglyLinkedList : public Inventory<T> {
 
 		SinglyLinkedList(): head(nullptr){
 			//default constructor
-			//I think datum needs to be assigned to a new T
-			//head->datum = new T;
+
 		}
 
 
@@ -75,8 +74,7 @@ class SinglyLinkedList : public Inventory<T> {
 				this->head = head->next;
 				//delete the head through the copy
 				delete temp_ptr;
-				//good to set temp_ptr to null so it doesn't get hit with a double delete
-				//temp_ptr = nullptr;
+
 			}
 
 		}
@@ -91,7 +89,6 @@ class SinglyLinkedList : public Inventory<T> {
 			Node* tracker = this->head;
 			while (nullptr!=tracker){
 				//if the tracker contains the search term (find returns a value other than string::npos)
-				//std::cout<<line.str().substr(0, search.size())<<std::endl;
 				if (tracker->datum == search){
 				//return the tracker--will be the first item to contain the term
 					return &(tracker->datum);
@@ -110,7 +107,7 @@ class SinglyLinkedList : public Inventory<T> {
 		void push_all(const SinglyLinkedList& other){
 			//womp womp don't need to make a copy and delete, just need to iterate down like contains.
 			//instead of checking for same, do a push_front() with the current data
-				//can't use .begin() or .end() because this is const, must define custom. Iterators are generally for use outside of the class.
+			//can't use .begin() or .end() because this is const, must define custom. Iterators are generally for use outside of the class.
 			//loop through the list until you reach the nullptr at the end
 			Iterator it = Iterator(other.head);
 			while (it != nullptr){
@@ -177,9 +174,8 @@ class SinglyLinkedList : public Inventory<T> {
 		// These are "the big three" that make it easier to work with complex data types
 		// copy constructor
 		SinglyLinkedList(const SinglyLinkedList& other){
-			//make new copies for everything--use push_all to do this?
+			//make new copies for everything
 			//will need two directions of push_all.
-			//LOOK INTO THIS: if, in this context, temp_1 is intialized without the <T>, what happens?
 
 			SinglyLinkedList<T> temp_1 = SinglyLinkedList<T>();
 			temp_1.push_all(other);
@@ -202,7 +198,9 @@ class SinglyLinkedList : public Inventory<T> {
 		// destructor
 		~SinglyLinkedList(){
 			//pop all
-			//try deleting head again and see if I get double free. actually, can safely delete it because head is redefined to nullptr at the end of pop_front()).
+
+			//try deleting head again and see if I get double free. actually, can safely delete it 
+			//because head is redefined to nullptr at the end of pop_front()).
 			std::cout << "destructor for the singly linked list" << std::endl;
 			this->pop_all();
 			delete this->head;
@@ -237,10 +235,6 @@ class SinglyLinkedList : public Inventory<T> {
 				this->node = this->node->next;
 				return *this;
 			}
-
-			// postfix iterator increment operator
-			//&T may need to be const
-			// Iterator& operator++ (T&);
 
 			// equality check between two iterators
 			bool operator== (Iterator other) const{

@@ -65,42 +65,6 @@ int main(int argc, char** argv)
 	// 	cout << "Done trying to output the movies again." << endl;
 	// }
 
-	// //Caitlyn testing--able to build a singly list inverntory and find individual items.
-	// Inventory<Movie>* test;
-	// test = new SinglyLinkedList<Movie>;
-	// //Movie movie;
-	// while (finicky_database.readFirst(movie)){
-	// 	test->insert(movie);
-	// 	cout<<movie<<endl;
-	// }
-	// cout<<"read from finicky\n";
-	// cout<<test->size()<<endl;
-	// cout<<*(test->contains("Madame DuBarry"))<<endl;
-	//finds the movie and prints its line
-	//Binary_Tree<Movie>* test = new Binary_Tree<Movie>();
-	
-	//cout<<*(test->contains("Madame DuBarry"))<<endl;
-
-	// finicky_database.readFirst(movie);
-	// test->insert(movie);
-	// int tracker = 0;
-	// cout<<finicky_database.size()<<endl;
-	// while (finicky_database.readFirst(movie)){
-	// 	test->insert(movie);
-	// 	//cout<<movie<<endl;
-	// 	tracker++;
-	// }
-
-	// // //cout<<test->getRoot()<<endl;
-	// // cout<<"read from finicky\n";
-	// test->print(cout);
-	// cout<<test->size()<<" "<<tracker<<endl;
-	// cout<<(test->contains("Cleopatra"))<<endl;
-	// //finds the movie and prints its line
-
-
-
-
 	// you can comment the code for step 1 above once you're done.
 	// you will use similar functionality below
 	// (leave the copy constructor and operator= for the Movie class)
@@ -123,7 +87,6 @@ int main(int argc, char** argv)
 	// instantiate your inventory 
 	//Inventory* inventory;		// if not using templates
 	Inventory<Movie>* inventory = nullptr;	// if using templates
-	//inventory = new SinglyLinkedList<Movie>();
 
 // *****************************************************************************************************
 	// step 2: instantiate an inventory as a linked list
@@ -142,7 +105,6 @@ int main(int argc, char** argv)
 	else if( operations[0] == "type" && operations[1] == "binary_tree" )
 	{
 		cerr << "Instantiating the inventory as a binary tree!" << endl;
-		//here's what's weird: when I run with the smaller count_test tsv, it finds the correct number of lines. When I run it with the full database, it finds one fewer. I want to assume this is not my error, based on the fact that starting from the beginning is fine but something towards the end seems not to be duplicating.
 		inventory = new Binary_Tree<Movie>();
 	
 	}
@@ -167,36 +129,28 @@ int main(int argc, char** argv)
 	// step 3.5: populate your inventory from the finicky database
 
 	// show the current state of the inventory
-	//tested this above--works
 	while (finicky_database.readFirst(movie)){
 		inventory->insert(movie);
-		//cout<<movie<<endl;
+
 	}
 	cout<<"Populated inventory with "<<inventory->size()<<" items."<<endl;
-	//cerr << *inventory << endl;
 // *****************************************************************************************************
 	// step 4: implement a user list as a doubly linked list
 	// process each command in the test case according to the inventory interface
 	start = std::chrono::high_resolution_clock::now();
 	DoubleList<Movie> user_list;
-	// cout<<"defined user_list, size "<<user_list.size()<<endl;
 
 	//adding the loop for operations
 	for (int i = 2; i < operations.size(); i+=2){
-		//cout<<"entered loop"<<endl;
-		//cout<<operations[i+1]<<endl;
+
 		if (operations[i] == "insert"){
-			//cout<<"inserting "<<operations[i+1]<<endl;
 			//needs to run contains for the insert term. 
-			//contains returns a const. This can't be const, because it has to be resued loop to loop. instead, must check if the value does not get a nullptr
+			//must check if the value does not get a nullptr
 
 			//if the pointer isn't null (movie found), add its value.
 			if (nullptr != inventory->contains(operations[i+1])){
-				//cout<<"trying to insert"<<endl;
 				Movie insert_movie = *inventory->contains(operations[i+1]);
-				//cout<<insert_movie<<endl;
 				user_list.insert(insert_movie);
-				//cout<<"ran insert"<<endl;
 
 			}
 			//otherwise, continue.
@@ -230,9 +184,6 @@ int main(int argc, char** argv)
 			}
 
 		}
-		//cout<<user_list<<endl;
-		// int a = user_list.size();
-		// cout<<"ran user_list.size: "<<a<<endl;
 		
 	}
 
@@ -263,8 +214,4 @@ int main(int argc, char** argv)
 	delete inventory;
 
 	return 0;
-	//getting occassional double free errors--ont sure why. task for Tues.
-
-	//on test 3: getting an error in the binary tree. It's finding different movies of the same name. May need to change contains checks to make sure they match entirely up until the first tab in the full string. 
-	//That will only fix the Hua pi case though--Girls Town is the same name exactly. Given just the name string, comes down to the one encountered first in the inventory.
 }
