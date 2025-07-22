@@ -56,3 +56,4 @@ Last modified: 22/07/2025
 <h2>Other tests and known issues/important notes</h2>
 <li>If two movies have the exact same name, the one which is found first in the inventory will be used.</li>
 <li>Tested inventory construction and handling of doubles by running ./blockbuster with the count_test.tsv and double_test.tsv files respectively.</li>
+<li>The binary tree defaults to adding nodes to the left, unless the value being inserted is less than the current node.</li>
