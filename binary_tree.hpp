@@ -15,8 +15,6 @@ class Binary_Tree : public Inventory<T>{
             T value;
             TreeNode* left;
             TreeNode* right;
-
-            //TreeNode() : value(*(new T)), left(nullptr), right(nullptr){}
             TreeNode(T v) : value(v), left(nullptr), right(nullptr){}
             //unfortunately I think big 3 may be needed for this.
         };
@@ -27,12 +25,10 @@ class Binary_Tree : public Inventory<T>{
         //EFFECTS: return the size of the list as a size_t.
         size_t sizeInternal(TreeNode* node) const{
             if (nullptr==node){
-                //std::cout<<"Movie is null!"<<std::endl;
                 return 0;
                 
             }
             else{
-                //std::cout<<node->value<<std::endl;
                 return 1 + sizeInternal(node->left) + sizeInternal(node->right);
             }
 
@@ -44,13 +40,10 @@ class Binary_Tree : public Inventory<T>{
 
             //start--check the start is not nullptr. Because the tree is sorted, if it ever reaches a leaf, then it doesn't contain the value.
             if (nullptr == node){
-                //std::cout<<"all empty"<<std::endl;
                 return nullptr;
             }
-            //now can define the string
-            // std::stringstream line;
-            // line<<node->value;
-            //if the line contains the search, return pointer to the current node
+
+            //if the title equals the search, return pointer to the current node
             
 			if (node->value==search){
                 return &(node->value);
@@ -73,10 +66,8 @@ class Binary_Tree : public Inventory<T>{
             if (nullptr == node_ptr){
                 //this was causing issues because node is a copy of the node pointer. By reassigning it to a new, this change was not passed on to the tree itself. 
                 //Thus, by turning node into a pointer pointer, the function makes a copy of the outer pointer, which is unchanged, while the inner pointer can be changed for both.
-                //std::cout<<"entered node is nullptr"<<std::endl;
+                //nwm it works now
                 node_ptr = new TreeNode(toAdd);
-                //std::cout<<"reassigned node"<<std::endl;
-                //node->value = toAdd;
                 return node_ptr;
             }
             //otherwise, if toAdd is greater than the current node, add it to the right. 
@@ -84,13 +75,9 @@ class Binary_Tree : public Inventory<T>{
                 //reassigns the right node to be the new value--starts new loop on new, smaller tree
                 node_ptr->right = insertInternal(node_ptr->right, toAdd);
             }
-            else /*if (node_ptr->value > toAdd)*/{
+            else{
                 node_ptr->left = insertInternal(node_ptr->left, toAdd);
             }
-            // else{
-            //     std::cout<<toAdd<<std::endl<<node_ptr->value<<std::endl;
-            //     exit(4);
-            // }
             return node_ptr;
             
 
@@ -135,19 +122,13 @@ class Binary_Tree : public Inventory<T>{
             T newObject = toAdd;
             std::stringstream newLine;
             newLine<<newObject;
-            //std::cout<<newLine.str()<<std::endl;
             if (!contains(newLine.str())){
                 //now do the internal
-                //std::cout<<"doesn't contain the new movie!"<<std::endl;
-
-                //this is causing some reference issues. The internal is creating dangling pointers. Need to modify the input type so it's not just copying the pointers.
                 root = insertInternal(this->root, newObject);
-                //cout<<this->root<<nullptr<<endl;
             }
             else {
+                //should never run
                 std::cout<<newLine.str()<<"not found"<<std::endl;
-                //exit(5);
-
             }
 
         }
@@ -158,25 +139,12 @@ class Binary_Tree : public Inventory<T>{
         }
         virtual size_t	size() const override{
             return sizeInternal(this->root);
-
         }
         virtual void print(std::ostream& output_stream) const override{
             //yeah need to format again
             printInternal(output_stream, this->root);
             output_stream<<std::endl;
         }
-
-
-        // //Need some sort of functor or func pointer that can iterate down through the tree and do something wuth each node it passes. Call it xylem or something.
-        // //REQUIRES: a TreeNode ptr (start at the top), a behavior (func pointer) that takes a node, and a reference to an output object of any type.
-        // //EFFECTS: navigates down the list, performing the desired function at each node.
-        // //MODIFIFES: the output object
-        // Node* xylem(TreeNode* node, ){
-        //     if (nullptr!=node){
-        //         //now can do things
-        //         xylem()
-        //     }
-        // }
 
 
         bool isEmpty(){
@@ -242,37 +210,5 @@ class Binary_Tree : public Inventory<T>{
         }
 };
 
-
-
-
-
-
-
-
-//old:
-// class BST{
-// private:
-//     class TreeNode{
-//         int value;
-//         TreeNode* left;
-//         TreeNode* right;
-
-//         TreeNode();
-//         TreeNode(int v);
-//     };
-
-//     TreeNode* root;
-// public:
-//     bool isEmpty();
-//     void insertNode(TreeNode *new_node); 
-//     void print2D(TreeNode *r, int space); 
-//     //void swap(TreeNode *node1, TreeNode *node2); // swap (do this with the list hpps???)
-//     TreeNode* minValueNode(TreeNode* node);
-//     TreeNode* search( int v); //check if a query is in the inventory
-//     TreeNode* deleteNode(TreeNode* r, int v); // remove a movie from inventory
-
-//     //should inherit inventory. 
-
-// };
 
 #endif

@@ -50,12 +50,8 @@ public:
             this->head = new_node;
         }
         else { // else we need to create a new node that the head points to, and make the tail point to the head (since there is only one node)
-            //std::cout<<"head is null"<<std::endl;
             this->head = new DoubleNode(data,nullptr,nullptr); //prev and head pointer is null
-            //std::cout<<"created new node"<<std::endl;
-            //cout<<head->data<<endl;
             this->tail = this->head; 
-            //std::cout<<"head and tail assigned to same"<<std::endl;
         }       
     }
     void push_back(T data) {
@@ -67,8 +63,6 @@ public:
         }
         else { // else we need to create a new node that the head points to, and make the tail point to the head (since there is only one node)
             this->head = new DoubleNode(data,nullptr,nullptr); //prev and head pointer is null
-            //std::cout<<"created new node"<<std::endl;
-            //cout<<head->data<<endl;
             this->tail = this->head; 
         }  
     }
@@ -78,8 +72,7 @@ public:
             DoubleNode* temp = head; // create pointer to the front of list (head)
             head = head -> next; //move the head forward one
             
-            delete temp; //delete pointer and null it
-            //temp = NULL;
+            delete temp; //delete pointer
         }
         
     }
@@ -89,8 +82,7 @@ public:
             tail->prev->next = nullptr; //null the end
             tail = tail->prev; //move the tail backward one (new end of the list)
 
-            delete temp; //delete pointer and null it
-            temp = NULL;
+            delete temp; //delete pointer
         }
         
     }
@@ -122,15 +114,9 @@ public:
     }
     // Add new data to the front of the list
 	virtual void insert(const T& data) override{
-		//create a new node and set its datum
-        //std::cout<<"In insert"<<endl;
-        
+		//create a new node and set its datum        
         T copy = data;
 		this->push_back(copy);
-        //std::cout<<"back in insert"<<std::endl;
-        //std::cout<<head->data<<endl;
-        
-
 	}
     // check if the list contains a particular item
     virtual const T* contains(const std::string& search) const override{
@@ -141,7 +127,6 @@ public:
         while (nullptr!=tracker){
 
             //if the tracker contains the search term (find returns a value other than string::npos)
-            //std::cout<<line.str().substr(0, search.size())<<std::endl;
             if (tracker->data==search){
             //return the tracker--will be the first item to contain the term
                 return &(tracker->data);
@@ -223,9 +208,6 @@ public:
 
     //swap two movies contained in the double linked list
     void swap(const T& first_val, const T& second_val){
-        //Caitlyn: I don't understand this version. I don't see how the int iteration worked. Can't we just do temp direclty assigning to node1 and node2?
-        //also: easier to implement in main if we can pass in const refs to movie objects.
-        // //create temp holders for the nodes to swap with
         DoubleNode* curr1 = head;
         DoubleNode* curr2 = head;
         
@@ -258,7 +240,6 @@ public:
         while( current != nullptr /*&& current->data != data*/){
             
             if (current->data == data){
-                //std::cout<<"reached node for "<<current->data<<endl;
                 //if current is the only element
                 if (this->head == this->tail){
                     std::cout<<"only 1 element"<<endl;
@@ -282,7 +263,6 @@ public:
                 }
                 //make sure the current node is deleted
                 delete current;
-                //current = NULL;
                 return;
 
             }
