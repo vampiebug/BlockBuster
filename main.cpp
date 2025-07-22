@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 	auto diff  = std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
 
 	start = std::chrono::high_resolution_clock::now();
-	// this is an untrustworthy database
+	//this is an untrustworthy database
 	FinickyDatabase<Movie> finicky_database;
 	finicky_database.populate( argv[1] );
 	end = std::chrono::high_resolution_clock::now();

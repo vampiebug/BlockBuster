@@ -90,12 +90,9 @@ class SinglyLinkedList : public Inventory<T> {
 			//create tracker first
 			Node* tracker = this->head;
 			while (nullptr!=tracker){
-				//pipe the tracker's datum to a string.
-				std::stringstream line;
-				line<<tracker->datum;
 				//if the tracker contains the search term (find returns a value other than string::npos)
 				//std::cout<<line.str().substr(0, search.size())<<std::endl;
-				if (search.compare(line.str().substr(0, search.size())) == 0){
+				if (tracker->datum == search){
 				//return the tracker--will be the first item to contain the term
 					return &(tracker->datum);
 				}

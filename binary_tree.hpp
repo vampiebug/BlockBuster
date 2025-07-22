@@ -48,22 +48,23 @@ class Binary_Tree : public Inventory<T>{
                 return nullptr;
             }
             //now can define the string
-            std::stringstream line;
-            line<<node->value;
+            // std::stringstream line;
+            // line<<node->value;
             //if the line contains the search, return pointer to the current node
             
-			if (search.compare(line.str().substr(0, search.size())) == 0){
+			if (node->value==search){
                 return &(node->value);
             }
             //if the node is less than the search, go right
-            else if (line.str() < search){
+            else if (node->value.get_title() < search){
                 return containsInternal(node->right, search);
             }
             //if the node is less than the search, go right
-            else if (line.str() > search){
+            else if (node->value.get_title() > search){
                 return containsInternal(node->left, search);
             }
 			//only will reach if none found--actually should never reach, but leaving it to be safe.
+            std::cout<<search<<"not found"<<std::endl;
 			return nullptr;
         }
         TreeNode* insertInternal(TreeNode* node_ptr, const T& toAdd){
@@ -142,6 +143,11 @@ class Binary_Tree : public Inventory<T>{
                 //this is causing some reference issues. The internal is creating dangling pointers. Need to modify the input type so it's not just copying the pointers.
                 root = insertInternal(this->root, newObject);
                 //cout<<this->root<<nullptr<<endl;
+            }
+            else {
+                std::cout<<newLine.str()<<"not found"<<std::endl;
+                //exit(5);
+
             }
 
         }
