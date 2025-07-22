@@ -158,9 +158,7 @@ int main(int argc, char** argv)
 	//Report time for inventory
 	diff  = std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
 	cerr
-		<< "Populated the finicky database with "
-		<< finicky_database.size()
-		<< " items in "
+		<< "Instantiated the linked list/binary tree in "
 		<< diff
 		<< " seconds"
 		<< endl
@@ -246,9 +244,7 @@ int main(int argc, char** argv)
 	//report time for doubly linked list
 	diff  = std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
 	cerr
-		<< "Populated the finicky database with "
-		<< finicky_database.size()
-		<< " items in "
+		<< "Implemented the doubly linked list in "
 		<< diff
 		<< " seconds"
 		<< endl
