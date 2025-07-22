@@ -94,7 +94,8 @@ class SinglyLinkedList : public Inventory<T> {
 				std::stringstream line;
 				line<<tracker->datum;
 				//if the tracker contains the search term (find returns a value other than string::npos)
-				if (line.str().find(search) != std::string::npos){
+				//std::cout<<line.str().substr(0, search.size())<<std::endl;
+				if (search.compare(line.str().substr(0, search.size())) == 0){
 				//return the tracker--will be the first item to contain the term
 					return &(tracker->datum);
 				}
@@ -117,7 +118,7 @@ class SinglyLinkedList : public Inventory<T> {
 			Iterator it = Iterator(other.head);
 			while (it != nullptr){
 				//add the data
-				this->push_front(*it);
+				this->insert(*it);
 				++it;
 			}
 		}

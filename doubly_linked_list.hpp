@@ -10,16 +10,14 @@ using namespace std;
 template <typename T>
 class DoubleList : public Inventory<T>{
 private:
-	struct DoubleNode { //initialize the head pointers and null
+	class DoubleNode { //initialize the head pointers and null
+        friend class DoubleList;
 		T data;	// holds a piece of data
 		DoubleNode* next;	// holds a pointer to the next node
         DoubleNode* prev;
 
-		DoubleNode(T Data){
-            data = Data;
-            next = nullptr;
-            prev = nullptr;
-        }
+		DoubleNode(T Data) : data(Data), next(nullptr), prev(nullptr){}
+        DoubleNode(T Data, DoubleNode* _next, DoubleNode* _prev) : data(Data), next(_next), prev(_prev){}
 
 
 	};
@@ -45,23 +43,34 @@ public:
         }
     }
     void push_front(T data) {
+        //std::cout<<"In push_front"<<endl;
         if (head != nullptr) { // push to the front of the list
-            head = new DoubleNode(data, nullptr, head); //prev pointer is null
-            head ->next->prev = head;
+            DoubleNode* new_node = new DoubleNode(data, head, nullptr); //prev pointer is null
+            this->head->prev = new_node;
+            //reassign head last
+            this->head = new_node;
         }
         else { // else we need to create a new node that the head points to, and make the tail point to the head (since there is only one node)
-            head = new DoubleNode(data,nullptr,nullptr); //prev and head pointer is null
-            tail = head; 
+            //std::cout<<"head is null"<<std::endl;
+            this->head = new DoubleNode(data,nullptr,nullptr); //prev and head pointer is null
+            //std::cout<<"created new node"<<std::endl;
+            //cout<<head->data<<endl;
+            this->tail = this->head; 
+            //std::cout<<"head and tail assigned to same"<<std::endl;
         }       
     }
     void push_back(T data) {
         if (tail != nullptr) { // push to the back of the list
-            tail = new DoubleNode(data, tail,nullptr); // head is null
-            tail->prev->next = tail;
+            //creates new node with tail as the previous
+            DoubleNode* new_node = new DoubleNode(data, nullptr, tail); // next is null, prev is the current tail
+            this->tail->next = new_node;
+            this->tail = new_node;
         }
         else { // else we need to create a new node that the head points to, and make the tail point to the head (since there is only one node)
-            tail = new DoubleNode(data,nullptr,nullptr); //prev and head pointer is null
-            head = tail;
+            this->head = new DoubleNode(data,nullptr,nullptr); //prev and head pointer is null
+            //std::cout<<"created new node"<<std::endl;
+            //cout<<head->data<<endl;
+            this->tail = this->head; 
         }  
     }
 
@@ -114,62 +123,61 @@ public:
     }
     // Add new data to the front of the list
 	virtual void insert(const T& data) override{
-		//create a new node
-		DoubleNode* new_node = new DoubleNode();
-		//set its datum
-		new_node->data = data;
-		//set its next to the head
-		new_node->next = this->head;
-		//set the head to the new node.
-		this->head = new_node;	
+		//create a new node and set its datum
+        //std::cout<<"In insert"<<endl;
+        
+        T copy = data;
+		this->push_back(copy);
+        //std::cout<<"back in insert"<<std::endl;
+        //std::cout<<head->data<<endl;
+        
+
 	}
     // check if the list contains a particular item
-	bool contains(const DoubleList& list) const{
-        // Initialize a pointer with the head of linked list
-        DoubleNode* current = head;
-
-        // Iterate over all the nodes in the list
-        while (current != nullptr) {
-            // If the current node's value is equal to the data in the list, will return true
-            if (current->data == list.data){
-                return true;
+    virtual const T* contains(const std::string& search) const override{
+        //need to completely redo this to rely on strings
+        //if datum.print contains search, return true?
+        //create tracker first
+        DoubleNode* tracker = this->head;
+        while (nullptr!=tracker){
+            //pipe the tracker's datum to a string.
+            std::stringstream line;
+            line<<tracker->data;
+            //if the tracker contains the search term (find returns a value other than string::npos)
+            //std::cout<<line.str().substr(0, search.size())<<std::endl;
+            if (search.compare(line.str().substr(0, search.size())) == 0){
+            //return the tracker--will be the first item to contain the term
+                return &(tracker->data);
             }
-            // Move to the next node
-            current = current->next;
+            //move to next
+            tracker = tracker->next;
         }
 
-        // If there is no node with the same value, will return false
-        return false;
+        //only will reach if none found
+        return nullptr;
+
+        
     }
     virtual size_t size() const override{
 		DoubleNode* curr = this->head;
 		size_t size = 0;
-		while (nullptr!= curr){
+		while (nullptr != curr){
 			size++;
 			curr = curr->next;
 		}
 		return size;
 	}
     // prints the list to a stream (basically the same as single)
-    void print(std::ostream& output_stream) const{
-        output_stream << "[";
-        for(DoubleNode* temp = head; head != nullptr; temp=temp->next){
+    void print(std::ostream& output_stream) const override{
+        for(DoubleNode* temp = head; temp != nullptr; temp=temp->next){
             output_stream << temp->data;
-            output_stream<<", ";
+            output_stream<<std::endl;
         }
-        output_stream << "]";
     }
     // prints the list to a stream in a convenient way (non-member)
     friend std::ostream& operator<< (std::ostream& output_stream, const DoubleList& list) {
-        output_stream << "[";
-        output_stream << list.head->data;
-        DoubleNode* temp = list.head->next;
-        while (temp != nullptr) {
-            output_stream <<  ", " << temp->data;
-            temp = temp->next;
-        }
-        output_stream << "]";
-        return output_stream; 
+        list.print(output_stream);
+        return output_stream;
     }
     // determines if the data contained by one list is the same as in the other
 	bool operator== (const DoubleList& other) const{
@@ -217,48 +225,77 @@ public:
     }
 
     //swap two movies contained in the double linked list
-    void swap(DoubleNode* node1, DoubleNode* node2){
-        //create temp holders for the nodes to swap with
+    void swap(const T& first_val, const T& second_val){
+        //Caitlyn: I don't understand this version. I don't see how the int iteration worked. Can't we just do temp direclty assigning to node1 and node2?
+        //also: easier to implement in main if we can pass in const refs to movie objects.
+        // //create temp holders for the nodes to swap with
         DoubleNode* curr1 = head;
         DoubleNode* curr2 = head;
         
-        //find the correct node they should point to
-        for(int i = 1; i < node1; i++) {
+        // //find the correct node they should point to
+        while(curr1!=nullptr) {
+            if (curr1->data==first_val){
+                break;
+            }
             curr1 = curr1->next;
         }
-        for(int i = 1; i < node2; i++) {
+        while(curr2!=nullptr) {
+            if (curr2->data==second_val){
+                break;
+            }
             curr2 = curr2->next;
         }
 
-        //swap the values of two nodes
-        int value = curr1->data;
+        // //swap the values of two nodes--should invoke assignment operator override of movie.
+        T value = curr1->data;
         curr1->data = curr2->data;
         curr2->data = value;
+
     }
 
     //remove a specific movie from the double linked list using pop function
-    void remove(T data){
+    void remove(const T& data){
         DoubleNode* current = head; //tracker starting at the front of the list
+        std::cout<<"Entered remove"<<std::endl;
 
-        while( current != nullptr && current->data != data){
-            current = current->next; //traverse the double linked list until the data equals
+        while( current != nullptr /*&& current->data != data*/){
+            
+            if (current->data == data){
+                //std::cout<<"reached node for "<<current->data<<endl;
+                //if current is the only element
+                if (this->head == this->tail){
+                    std::cout<<"only 1 element"<<endl;
+                    this->head = nullptr;
+                    this->tail = nullptr;
+                }
+                //if current is tail:
+                else if (current->next == nullptr){
+                    current->prev->next = nullptr;
+                    this->tail = current->prev;
+                }
+                //if current is head:
+                else if (current->prev == nullptr){
+                    current->next->prev = nullptr;
+                    this->head = current->next;
+                }
+                //otherwise (in list):
+                else{
+                    current->prev->next = current->next;
+                    current->next->prev = current->prev;
+                }
+                //make sure the current node is deleted
+                delete current;
+                //current = NULL;
+                return;
+
+            }
+            current = current->next;
+
         }
         
-        if (current != nullptr){
-            if (current->next != nullptr){
-                current = current->next;
-            }
-            else if (current->prev != nullptr){
-                current->prev->next = current->next; //the previous node will be next
-            }
-            else{
-                head = current->next;
-            }
-            delete current;
-            current = NULL;
-        }
+
     }
-\
+
 
     class Iterator {
         friend class DoubleList;

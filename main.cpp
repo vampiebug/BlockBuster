@@ -77,25 +77,25 @@ int main(int argc, char** argv)
 	// cout<<test->size()<<endl;
 	// cout<<*(test->contains("Madame DuBarry"))<<endl;
 	//finds the movie and prints its line
-	Binary_Tree<Movie>* test = new Binary_Tree<Movie>();
+	//Binary_Tree<Movie>* test = new Binary_Tree<Movie>();
 	
 	//cout<<*(test->contains("Madame DuBarry"))<<endl;
 
 	// finicky_database.readFirst(movie);
 	// test->insert(movie);
-	int tracker = 0;
-	cout<<finicky_database.size()<<endl;
-	while (finicky_database.readFirst(movie)){
-		test->insert(movie);
-		//cout<<movie<<endl;
-		tracker++;
-	}
+	// int tracker = 0;
+	// cout<<finicky_database.size()<<endl;
+	// while (finicky_database.readFirst(movie)){
+	// 	test->insert(movie);
+	// 	//cout<<movie<<endl;
+	// 	tracker++;
+	// }
 
-	// //cout<<test->getRoot()<<endl;
-	// cout<<"read from finicky\n";
-	test->print(cout);
-	cout<<test->size()<<" "<<tracker<<endl;
-	cout<<(test->contains("Cleopatra"))<<endl;
+	// // //cout<<test->getRoot()<<endl;
+	// // cout<<"read from finicky\n";
+	// test->print(cout);
+	// cout<<test->size()<<" "<<tracker<<endl;
+	// cout<<(test->contains("Cleopatra"))<<endl;
 	// //finds the movie and prints its line
 
 
@@ -133,6 +133,7 @@ int main(int argc, char** argv)
 
 		linked_list = true;
 		inventory = new SinglyLinkedList<Movie>();
+		cout<<"list defined"<<endl;
 	}
 // *****************************************************************************************************
 	// step 3: instantiate an inventory as a binary tree
@@ -158,32 +159,91 @@ int main(int argc, char** argv)
 	//tested this above--works
 	while (finicky_database.readFirst(movie)){
 		inventory->insert(movie);
-		cout<<movie<<endl;
+		//cout<<movie<<endl;
 	}
-	cerr << *inventory << endl;
+	cout<<"Populated inventory with "<<inventory->size()<<" items."<<endl;
+	//cerr << *inventory << endl;
 // *****************************************************************************************************
 	// step 4: implement a user list as a doubly linked list (TODO)
 	// process each command in the test case according to the inventory interface
 
+	DoubleList<Movie> user_list;
+	// cout<<"defined user_list, size "<<user_list.size()<<endl;
+
 	//adding the loop for operations
-	for (int i = 2; i < operations.size() / 2; i+=2){
+	for (int i = 2; i < operations.size(); i+=2){
+		//cout<<"entered loop"<<endl;
+		//cout<<operations[i+1]<<endl;
 		if (operations[i] == "insert"){
+			cout<<"inserting "<<operations[i+1]<<endl;
+			//needs to run contains for the insert term. 
+			//contains returns a const. This can't be const, because it has to be resued loop to loop. instead, must check if the value does not get a nullptr
+
+			//if the pointer isn't null (movie found), add its value.
+			if (nullptr != inventory->contains(operations[i+1])){
+				//cout<<"trying to insert"<<endl;
+				Movie insert_movie = *inventory->contains(operations[i+1]);
+				//cout<<insert_movie<<endl;
+				user_list.insert(insert_movie);
+				//cout<<"ran insert"<<endl;
+
+			}
+			//otherwise, continue.
 			
 		}
 		if (operations[i] == "remove"){
-
+			//needs to run contains for the remove term on the user list.
+			cout<<"removing "<<operations[i+1]<<endl;
+			
+			//if the pointer isn't null (movie found), add its value.
+			if (user_list.contains(operations[i+1]) != nullptr){
+				Movie remove_movie = *user_list.contains(operations[i+1]);
+				user_list.remove(remove_movie);
+			}
+			//otherwise, continue.
 		}
 		if (operations[i] == "swap"){
+			//break up operations[i+1] along the '|'
+			cout<<"swapping "<<operations[i+1]<<endl;
+			string movie_1_str = operations[i+1].substr(0, operations[i+1].find("|"));
+			string movie_2_str = operations[i+1].substr(operations[i+1].find("|")+1, string::npos);
+			//run contains for both.
+			
+			//if contains is valid for both and they are not the same movie, run swap.
+			if (user_list.contains(movie_1_str) != nullptr && user_list.contains(movie_2_str) != nullptr){
+				Movie movie_1 = *user_list.contains(movie_1_str);
+				Movie movie_2 = *user_list.contains(movie_2_str);
+				if (&movie_1 != &movie_2){
+					user_list.swap(movie_1, movie_2);
+				}
+			}
 
 		}
+		//cout<<user_list<<endl;
+		int a = user_list.size();
+		cout<<"ran user_list.size: "<<a<<endl;
+		
 	}
 
 
 	// step 4.5: output the user list to stdout
-	//cerr << "Outputting user list." << endl;
-	//cout << user_list << endl;
+	cerr << "Outputting user list." << endl;
+	cout << user_list << endl;
+
+	//put the output to a file
+	std::fstream fout;
+
+	//open the filestream--trunc erases all its current contents.
+	fout.open("results.txt", std::ofstream::out | std::ofstream::trunc);
+	fout<<user_list;
+	fout.close();
+
 
 	cerr << "At the end of main!" << endl;
 
 	return 0;
+	//getting occassional double free errors--ont sure why. task for Tues.
+
+	//on test 3: getting an error in the binary tree. It's finding different movies of the same name. May need to change contains checks to make sure they match entirely up until the first tab in the full string. 
+	//That will only fix the Hua pi case though--Girls Town is the same name exactly. Given just the name string, comes down to the one encountered first in the inventory.
 }

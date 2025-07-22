@@ -51,7 +51,8 @@ class Binary_Tree : public Inventory<T>{
             std::stringstream line;
             line<<node->value;
             //if the line contains the search, return pointer to the current node
-            if (line.str().find(search) != std::string::npos){
+            
+			if (search.compare(line.str().substr(0, search.size())) == 0){
                 return &(node->value);
             }
             //if the node is less than the search, go right
@@ -112,7 +113,6 @@ class Binary_Tree : public Inventory<T>{
             //relies on iterating down and through.
             //when reach empty node, should assign. Look into sorting.
             //must not contain toAdd--need string of toAdd
-            //std::cout<<"In insert"<<std::endl;
             T newObject = toAdd;
             std::stringstream newLine;
             newLine<<newObject;
