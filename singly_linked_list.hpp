@@ -206,8 +206,10 @@ class SinglyLinkedList : public Inventory<T> {
 		~SinglyLinkedList(){
 			//pop all
 			//try deleting head again and see if I get double free. actually, can safely delete it because head is redefined to nullptr at the end of pop_front()).
+			std::cout << "destructor for the singly linked list" << std::endl;
 			this->pop_all();
 			delete this->head;
+			std::cout << "destructor for the singly linked list" << std::endl;
 		}
 		// ***************************************************************************
 

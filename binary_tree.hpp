@@ -103,11 +103,29 @@ class Binary_Tree : public Inventory<T>{
 
         }
 
+        //helper for operator= using pre-orer traversal
+        void copy_tree(Binary_Tree<T> *&dest, const Binary_Tree<T> *src){
+            if (src == nullptr){
+                dest = NULL;
+            }
+            
+            if (src!= nullptr){
+                dest = new Binary_Tree<T>;
+                dest->value = src->value;
+                copy_tree(dest->left, src->left);
+                copy_tree(dest->right, src->right);
+            }
+        }
+
     public:
         //need constructor
         Binary_Tree() : root(nullptr){}
 
-        
+        Binary_Tree(const Binary_Tree<T>& src){
+            root = nullptr;
+            operator=(root, src.root);
+        }
+
         //INVENTORY STUFF:
         virtual void insert(const T& toAdd) override{
             //relies on iterating down and through.
@@ -143,8 +161,6 @@ class Binary_Tree : public Inventory<T>{
         }
 
 
-
-
         // //Need some sort of functor or func pointer that can iterate down through the tree and do something wuth each node it passes. Call it xylem or something.
         // //REQUIRES: a TreeNode ptr (start at the top), a behavior (func pointer) that takes a node, and a reference to an output object of any type.
         // //EFFECTS: navigates down the list, performing the desired function at each node.
@@ -161,7 +177,6 @@ class Binary_Tree : public Inventory<T>{
             return 
             (this->root == nullptr);
         }
-
 
         //used for dtor
         //REQUIRES: a tree
@@ -186,35 +201,40 @@ class Binary_Tree : public Inventory<T>{
 
 
 
-
-
-
         //big 3:
-        //copy
-        Binary_Tree(T& copy){
+        //copy constructor
+        Binary_Tree(const TreeNode& copy){
             //need to work out the algorithm for this--relies on knowing how to construct tree.
             //root to root.
             //iterate down--make special funcs for this, or look into functors. either way, the func iterates down one level and assigns the new tree.
+            root = NULL;
+            operator=(copy);
+
+
         }
 
-        //assignment
+        // Assignment operator
         Binary_Tree& operator=(T& other){
-            //also need to define
+
+            if (root != nullptr){
+                clearTree(other.root);
+            }
+            copy_tree(root, other.root); //pre-order traversal
+
         }
 
-        //delete
+        //Deconstructor (delete stuff)
         ~Binary_Tree(){
             //this is going to be complicated
             //iterate down to and delete leaves, reassign to nulltr
             //do this until everything is deleted (isEmpty)
             //check the size to make sure they're all deleted
+            std::cout << "destructor for the binary tree" << std::endl;
             clearTree(getRoot());
-            std::cout<<size()<<std::endl;
+            std::cout << "destructor for the binary tree" << std::endl;
+
         }
 };
-
-
-
 
 
 

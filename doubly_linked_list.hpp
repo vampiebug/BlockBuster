@@ -32,8 +32,7 @@ public:
     }
     ~DoubleList() { //Deconstructor
         this->pop_all();
-        delete this->head;
-        delete this->tail;
+
     }
     bool empty() const {
         if (head == nullptr)
@@ -80,7 +79,7 @@ public:
             head = head -> next; //move the head forward one
             
             delete temp; //delete pointer and null it
-            temp = NULL;
+            //temp = NULL;
         }
         
     }

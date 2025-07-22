@@ -127,6 +127,7 @@ int main(int argc, char** argv)
 
 // *****************************************************************************************************
 	// step 2: instantiate an inventory as a linked list
+	start = std::chrono::high_resolution_clock::now();
 	if( operations[0] == "type" && operations[1] == "linked_list" )
 	{
 		cerr << "Instantiating the inventory as a linked list!" << endl;
@@ -134,6 +135,7 @@ int main(int argc, char** argv)
 		linked_list = true;
 		inventory = new SinglyLinkedList<Movie>();
 		cout<<"list defined"<<endl;
+		
 	}
 // *****************************************************************************************************
 	// step 3: instantiate an inventory as a binary tree
@@ -144,6 +146,7 @@ int main(int argc, char** argv)
 		inventory = new Binary_Tree<Movie>();
 	
 	}
+	
 // *****************************************************************************************************
 	// something is wrong here so we end
 	else
@@ -151,7 +154,17 @@ int main(int argc, char** argv)
 		cerr << "Malformed test file!" << endl;
 		return -1;
 	}
-
+	end = std::chrono::high_resolution_clock::now();
+	//Report time for inventory
+	diff  = std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
+	cerr
+		<< "Populated the finicky database with "
+		<< finicky_database.size()
+		<< " items in "
+		<< diff
+		<< " seconds"
+		<< endl
+		;
 // *****************************************************************************************************
 	// step 3.5: populate your inventory from the finicky database
 
@@ -164,9 +177,9 @@ int main(int argc, char** argv)
 	cout<<"Populated inventory with "<<inventory->size()<<" items."<<endl;
 	//cerr << *inventory << endl;
 // *****************************************************************************************************
-	// step 4: implement a user list as a doubly linked list (TODO)
+	// step 4: implement a user list as a doubly linked list
 	// process each command in the test case according to the inventory interface
-
+	start = std::chrono::high_resolution_clock::now();
 	DoubleList<Movie> user_list;
 	// cout<<"defined user_list, size "<<user_list.size()<<endl;
 
@@ -175,7 +188,7 @@ int main(int argc, char** argv)
 		//cout<<"entered loop"<<endl;
 		//cout<<operations[i+1]<<endl;
 		if (operations[i] == "insert"){
-			cout<<"inserting "<<operations[i+1]<<endl;
+			//cout<<"inserting "<<operations[i+1]<<endl;
 			//needs to run contains for the insert term. 
 			//contains returns a const. This can't be const, because it has to be resued loop to loop. instead, must check if the value does not get a nullptr
 
@@ -220,8 +233,8 @@ int main(int argc, char** argv)
 
 		}
 		//cout<<user_list<<endl;
-		int a = user_list.size();
-		cout<<"ran user_list.size: "<<a<<endl;
+		// int a = user_list.size();
+		// cout<<"ran user_list.size: "<<a<<endl;
 		
 	}
 
@@ -229,7 +242,17 @@ int main(int argc, char** argv)
 	// step 4.5: output the user list to stdout
 	cerr << "Outputting user list." << endl;
 	cout << user_list << endl;
-
+	end = std::chrono::high_resolution_clock::now();
+	//report time for doubly linked list
+	diff  = std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
+	cerr
+		<< "Populated the finicky database with "
+		<< finicky_database.size()
+		<< " items in "
+		<< diff
+		<< " seconds"
+		<< endl
+		;
 	//put the output to a file
 	std::fstream fout;
 
@@ -240,6 +263,8 @@ int main(int argc, char** argv)
 
 
 	cerr << "At the end of main!" << endl;
+	//need to delete because it's a pointer
+	delete inventory;
 
 	return 0;
 	//getting occassional double free errors--ont sure why. task for Tues.
